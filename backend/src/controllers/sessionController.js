@@ -47,7 +47,7 @@ export async function createSession(req,res){
 export async function getActiveSessions(req,res){ // here req is not being used you can put underscore there
 
    try {
-       const sessions = Session.find({status:"active"}) // look for now it is only checking active sessions, what if any session is not active, think about that scenario also
+       const sessions =await  Session.find({status:"active"}) // look for now it is only checking active sessions, what if any session is not active, think about that scenario also
        sessions.populate("host","name profileImage email clerkId").
        sort({createdAt:-1}).limit(20)
 
@@ -87,8 +87,7 @@ try {
 const id = params.id;      // Phir usme se id nikalo
    */
 
-   const session = await Session.findOne(id)
-   session.populate("host","name profileImage email clerkId").
+   const session = await Session.findById(id).populate("host","name profileImage email clerkId").
    populate("participant","name profileImage email clerkId")
 
    if(!session) res.status(404).json({message:"Session not Found"})
@@ -109,9 +108,10 @@ export async function joinSession(req,res){
 
       const session = await Session.findById(id)
       //only to members are allowed so check it
-         if(!session) res.status(404).json({message:"Session not Found"})
+         if(!session) return res.status(404).json({message:"Session not Found"})
+         if(session.host.toString() === userId.toString()) return res.status(400).json({message:"Host cannot join as participant"})
 
-      if(session.participant) return res.status(404).json({message:"Session is Full"})  
+      if(session.participant) return res.status(400).json({message:"Session is Full"})  
       session.participant = userId
       await session.save()
       
@@ -128,11 +128,11 @@ export async function joinSession(req,res){
       Kaam kya hai? User ko us specific room ka Official Member banana taaki wo chat/call kar paye. ✅
 
        */
-   res.status(200).json(message)
+   return res.status(200).json(message)
 
    } catch (error) {
          console.log("Error in joinSession controller: ",error.message)
-   res.status(500).json({message: "Internal server error"})
+   return res.status(500).json({message: "Internal server error"})
    }
 }
 
@@ -146,16 +146,13 @@ export async function endSession(req,res){
       if(!session) return res.status(404).json({message:"Session doesnt exist"})
 
       //check if user is host   
-      if(session.host.toString()!= userId){ // hence  type: mongoose.Schema.Types.ObjectId means that moongose id, not that normal id
-         return res.status(403).json("Only host can end session")
+      if(session.host.toString()!= userId.toString()){ // hence  type: mongoose.Schema.Types.ObjectId means that moongose id, not that normal id
+         return res.status(403).json({message:"Only host can end session"})
       }
 
       if(session.status==="completed"){
          return res.status(403).json({message:"Session already completed"})
       }
-
-      session.status = "completed"
-      await session.save()
 
       //now delete video call
 
@@ -166,6 +163,9 @@ export async function endSession(req,res){
       //now delete chat
       const channel = chatClient.channel("messaging",session.callId);
       await channel.delete();
+
+      session.status = "completed"
+      await session.save()
 
       res.status(200).json({session,message:"Session ended successfully"})
 
