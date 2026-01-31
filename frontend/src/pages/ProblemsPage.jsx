@@ -1,7 +1,8 @@
+import Navbar from "./Navbar"
 function ProblemsPage(){
     return(
         <>
-        <h1>Welcome to Problem Page</h1>
+        <Navbar />
         </>
     )
 }
