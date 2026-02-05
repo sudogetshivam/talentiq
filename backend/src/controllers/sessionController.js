@@ -47,8 +47,8 @@ export async function createSession(req,res){
 export async function getActiveSessions(req,res){ // here req is not being used you can put underscore there
 
    try {
-       const sessions =await  Session.find({status:"active"}) // look for now it is only checking active sessions, what if any session is not active, think about that scenario also
-       sessions.populate("host","name profileImage email clerkId").
+       const sessions =await  Session.find({status:"active"}).populate("host","name profileImage email clerkId").
+ // look for now it is only checking active sessions, what if any session is not active, think about that scenario also
        sort({createdAt:-1}).limit(20)
 
        res.status(200).json({sessions})
