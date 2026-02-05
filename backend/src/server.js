@@ -17,7 +17,7 @@ and dirname name is used to store the absolute path, deosnt matter from where yo
 
 app.use(express.json()) //converts coming json data to Javascript Object so that we can read in req.bodt
 app.use(cors({
-    origin: ENV.CLIENT_URL,
+    origin: [ENV.CLIENT_URL,"http://localhost:5173"],
     credentials:true //allows cookies/tokens to enter or to come along with
 }))
 

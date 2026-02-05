@@ -5,7 +5,7 @@ import { sessionApi } from "../api/sessions"
 export const useCreateSession = ()=>{
     const result = useMutation({
         mutationKey: ["createSession"],
-        mutationFn:() => sessionApi.createSession,
+        mutationFn: sessionApi.createSession,
         onSuccess :  () => toast.success("Session created sucessfully"),
         onError: (error) =>  toast.error(error.response?.data?.message || "Failed to create Session"),
         
@@ -17,7 +17,7 @@ export const useCreateSession = ()=>{
 export const useActiveSessions = () => {
     const result = useQuery({
         queryKey:["activeSessions"],
-        queryFn:() => sessionApi.getActiveSessions
+        queryFn: sessionApi.getActiveSessions
     })
     return result
 }
@@ -25,7 +25,7 @@ export const useActiveSessions = () => {
 export const useMyRecentSessions = () => {
     const result = useQuery({
         queryKey:["myRecentSessions"],
-        queryFn:() => sessionApi.getMyRecentSessions
+        queryFn:sessionApi.getMyRecentSessions
     })
 
     return result

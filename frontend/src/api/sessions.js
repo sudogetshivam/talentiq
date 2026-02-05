@@ -12,12 +12,12 @@ export const sessionApi = {
     },
 
     getMyRecentSessions : async () => {
-        const response = await axiosInstance.post("/sessions/my-recent",)
+        const response = await axiosInstance.get("/sessions/my-recent",)
         return response.data
     },
 
     getSessionById : async (id) => {
-        const response = await axiosInstance.post(`sessions/${id}`,)
+        const response = await axiosInstance.get(`sessions/${id}`,)
         return response.data
     },
 
