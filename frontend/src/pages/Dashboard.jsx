@@ -9,7 +9,6 @@ import ActiveSession from './ActiveSession';
 import CreateSessionModal from './CreateSessionModal';
 import RecentSessions from './RecentSessions';
 import StatsCards from './StatsCards';
-import sesssion from '../../../backend/src/models/Session';
 
 function Dashboard(){
     const navigate = useNavigate();
@@ -40,7 +39,7 @@ function Dashboard(){
     }
 
     const activeSessions = activeSessionData?.sessions || []
-    const recentSessions = recentSessionsData?.session || []
+    const recentSessions = recentSessionsData?.sessions || []
 
     const isUserInSession = (session) => {
         if(!user.id) return false;

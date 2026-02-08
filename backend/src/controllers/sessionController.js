@@ -86,7 +86,7 @@ export async function getMyRecentSessions(req,res){
          $or:[{host:userId},{participant:userId}],
    }).sort({createdAt:-1}).limit(20);
 
-   return res.status(200).json(sessions)
+   return res.status(200).json({sessions}) //bina curly braces
       
    } catch (error) {
       console.log("Error in getMyRecentSessions controller: ",error.message)
@@ -110,7 +110,7 @@ const id = params.id;      // Phir usme se id nikalo
    populate("participant","name profileImage email clerkId")
 
    if(!session) res.status(404).json({message:"Session not Found"})
-   res.status(200).json(message)
+   res.status(200).json({session})
 } catch (error) {
    console.log("Error in getSessionById controller: ",error.message)
   return res.status(500).json({message: "Internal server error"})
@@ -147,7 +147,7 @@ export async function joinSession(req,res){
       Kaam kya hai? User ko us specific room ka Official Member banana taaki wo chat/call kar paye. ✅
 
        */
-   return res.status(200).json(message)
+   return res.status(200).json({session,message:"Joined session successfully"})
 
    } catch (error) {
          console.log("Error in joinSession controller: ",error.message)
