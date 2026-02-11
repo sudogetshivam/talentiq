@@ -83,11 +83,11 @@ function static(folderName) {
 }
     }*/
 
-app.get('*',(req,res)=>{
-    return(
-        res.sendFile(path.join(__dirname,"../frontend","dist","index.html"))
-    )
-})
+app.get("/*", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "../frontend/dist/index.html")
+  );
+});
 }
 
 const startServer = async()=>{
